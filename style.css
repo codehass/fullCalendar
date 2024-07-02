@@ -55,3 +55,26 @@
 	text-decoration: none;
 	cursor: pointer;
 }
+
+.fc .fc-button-primary {
+	background-color: rgb(0, 105, 255);
+	border: none;
+}
+
+.fc-daygrid-event-harness {
+	background: rgb(0, 150, 136);
+	margin: auto 6px;
+	border-radius: 5px;
+	color: #fff;
+	padding-left: 10px;
+	margin-bottom: 4px;
+}
+
+.fc-daygrid-event-dot {
+	display: none;
+}
+
+.fc-event-title-container,
+.fc-event-time {
+	background: rgb(0, 150, 136);
+}

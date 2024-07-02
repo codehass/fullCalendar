@@ -8,10 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	console.log("Loaded events from localStorage:", eventsData);
 	let calendarEl = document.getElementById("calendar");
 	let calendar = new FullCalendar.Calendar(calendarEl, {
-		selectable: true,
 		editable: true,
+		droppable: true,
+		selectable: true,
+		selectHelper: true,
 		dateClick: function (info) {
 			console.log(info);
+
 			alert("clicked " + info.dateStr);
 		},
 		select: function (info) {
@@ -90,7 +93,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			// Get title and date from inputs
 			const eventTitle = document.getElementById("eventTitle").value;
-			const eventDate = document.getElementById("eventDate").value;
+			const startDate = document.getElementById("startDate").value;
+			const endDate = document.getElementById("endDate").value;
 
 			/*// Display event
 			console.log({
@@ -106,7 +110,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			const newEvent = {
 				title: eventTitle,
-				start: eventDate,
+				start: startDate,
+				end: endDate,
+				editable: true,
 			};
 
 			// to show event immediately in UI
