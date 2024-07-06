@@ -71,6 +71,9 @@ document.addEventListener("DOMContentLoaded", function () {
 					successCallback(events);
 				});*/
 		},
+		eventColor: "#378006",
+		backgroundColor: "#378006",
+		textColor: "#378006",
 		eventClick: function (info) {
 			console.log(info.event);
 		},
