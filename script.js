@@ -78,8 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			console.log(info.event);
 		},
 	});
-	// tests
-	// tests
+
 	calendar.render();
 
 	// close popup
