@@ -79,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 	});
 	// tests
+	// tests
 	calendar.render();
 
 	// close popup
