@@ -15,6 +15,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		dateClick: function (info) {
 			//console.log(info);
 		},
+		eventClick: function (info) {
+			console.log(info.event);
+			console.log(info.event.title);
+		},
 		select: function (info) {
 			console.log("Date range selected:", info);
 			let popup = document.getElementById("popup");
@@ -24,8 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
 				let endDateInput = document.getElementById("endDate");
 
 				if (startDateInput && endDateInput) {
-					const now = new Date();
-					startDateInput.value = formatDateTimeLocal(now);
+					//const now = new Date();
+					startDateInput.value = formatDateTimeLocal(info.start);
 					endDateInput.value = formatDateTimeLocal(info.end);
 				}
 			}
