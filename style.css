@@ -17,43 +17,70 @@
 .popup-content {
 	display: flex;
 	flex-direction: column;
-	background-color: #fefefe;
+	background-color: #fff;
 	margin: 15% auto;
 	padding: 20px;
-	border: 1px solid #888;
-	width: 300px;
+	border-radius: 8px;
+	width: 400px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .close {
 	display: flex;
-	justify-content: end;
+	justify-content: flex-end;
 }
 
 .close-btn {
 	color: #aaa;
-	float: right;
 	font-size: 28px;
 	font-weight: bold;
+	cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+	color: #000;
 }
 
 .eventForm {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	gap: 10px;
+	gap: 15px;
 }
 
 .input-el {
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	flex-direction: column;
+	gap: 5px;
 }
 
-.close-btn:hover,
-.close-btn:focus {
-	color: black;
-	text-decoration: none;
+.input-el label {
+	font-size: 14px;
+	color: #333;
+}
+
+.input-el input {
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	width: 100%;
+	font-size: 16px;
+	box-sizing: border-box;
+}
+
+button[type="submit"] {
+	background-color: rgb(0, 105, 255);
+	color: #fff;
+	padding: 10px 15px;
+	border: none;
+	border-radius: 4px;
+	font-size: 16px;
 	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+	background-color: rgb(0, 85, 204);
 }
 
 .fc .fc-button-primary {
@@ -69,12 +96,3 @@
 	padding-left: 10px;
 	margin-bottom: 4px;
 }
-
-/* .fc-daygrid-event-dot {
-	display: none;
-}
-
-.fc-event-title-container,
-.fc-event-time {
-	background: rgb(0, 150, 136);
-} */

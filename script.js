@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		? JSON.parse(localStorage.getItem("events"))
 		: [];
 
-	console.log("Loaded events from localStorage:", eventsData);
+	//console.log("Loaded events from localStorage:", eventsData);
 	let calendarEl = document.getElementById("calendar");
 	let calendar = new FullCalendar.Calendar(calendarEl, {
 		editable: true,
@@ -13,14 +13,24 @@ document.addEventListener("DOMContentLoaded", function () {
 		selectable: true,
 		selectHelper: true,
 		dateClick: function (info) {
-			console.log(info);
-
-			alert("clicked " + info.dateStr);
+			//console.log(info);
 		},
 		select: function (info) {
-			alert("selected " + info.startStr + " to " + info.endStr);
-		},
+			console.log("Date range selected:", info);
+			let popup = document.getElementById("popup");
+			if (popup) {
+				popup.style.display = "block";
+				let startDateInput = document.getElementById("startDate");
+				let endDateInput = document.getElementById("endDate");
 
+				if (startDateInput && endDateInput) {
+					const now = new Date();
+					startDateInput.value = formatDateTimeLocal(now);
+					endDateInput.value = formatDateTimeLocal(info.end);
+				}
+			}
+			console.log(info.startStr.slice(0, 16));
+		},
 		initialView: "dayGridMonth",
 		headerToolbar: {
 			start: "dayGridMonth,timeGridWeek,timeGridDay addEventButton",
@@ -52,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			},
 		},
 		events: function (info, successCallback, failureCallback) {
-			console.log("Loading events into calendar:", eventsData);
+			//console.log("Loading events into calendar:", eventsData);
 			successCallback(eventsData);
 			/*fetch(eventsData)
 				.then(function (resp) {
@@ -74,9 +84,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		eventColor: "#378006",
 		backgroundColor: "#378006",
 		textColor: "#378006",
-		eventClick: function (info) {
-			console.log(info.event);
-		},
+		// eventClick: function (info) {
+		// 	console.log(info);
+		// },
 	});
 
 	calendar.render();
@@ -112,6 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			});*/
 
 			const newEvent = {
+				id: uuidv4(),
 				title: eventTitle,
 				start: startDate,
 				end: endDate,
@@ -140,3 +151,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	};
 });
+
+function formatDateTimeLocal(date) {
+	const pad = (number) => (number < 10 ? "0" + number : number);
+
+	return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+		date.getDate()
+	)}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
