@@ -1,26 +1,35 @@
 document.addEventListener("DOMContentLoaded", function () {
-	//let eventsData = "/data.json";
-
 	let eventsData = localStorage.getItem("events")
 		? JSON.parse(localStorage.getItem("events"))
 		: [];
 
-	//console.log("Loaded events from localStorage:", eventsData);
 	let calendarEl = document.getElementById("calendar");
 	let calendar = new FullCalendar.Calendar(calendarEl, {
 		editable: true,
 		droppable: true,
 		selectable: true,
 		selectHelper: true,
-		dateClick: function (info) {
-			//console.log(info);
-		},
 		eventClick: function (info) {
-			console.log(info.event);
-			console.log(info.event.title);
+			let eventObj = info.event;
+
+			// Populate the popup form with event details
+			document.getElementById("eventTitle").value = eventObj.title;
+			document.getElementById("startDate").value = eventObj.start
+				.toISOString()
+				.slice(0, 16);
+			document.getElementById("endDate").value = eventObj.end
+				? eventObj.end.toISOString().slice(0, 16)
+				: "";
+			document.getElementById("popup").style.display = "block";
+
+			// Attach the event id to a hidden field or store it in a variable
+			document.getElementById("eventForm").dataset.eventId = eventObj.id;
+
+			// Change the form button text to "Edit Event" and show the delete button
+			document.getElementById("submitBtn").innerText = "Edit Event";
+			document.getElementById("deleteBtn").style.display = "inline-block";
 		},
 		select: function (info) {
-			console.log("Date range selected:", info);
 			let popup = document.getElementById("popup");
 			if (popup) {
 				popup.style.display = "block";
@@ -28,12 +37,16 @@ document.addEventListener("DOMContentLoaded", function () {
 				let endDateInput = document.getElementById("endDate");
 
 				if (startDateInput && endDateInput) {
-					//const now = new Date();
 					startDateInput.value = formatDateTimeLocal(info.start);
 					endDateInput.value = formatDateTimeLocal(info.end);
 				}
+
+				// Clear the form for new event
+				document.getElementById("eventTitle").value = "";
+				document.getElementById("eventForm").dataset.eventId = "";
+				document.getElementById("submitBtn").innerText = "Add Event";
+				document.getElementById("deleteBtn").style.display = "none";
 			}
-			console.log(info.startStr.slice(0, 16));
 		},
 		initialView: "dayGridMonth",
 		headerToolbar: {
@@ -54,8 +67,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			addEventButton: {
 				text: "Add new Event!",
 				click: function () {
-					// Display the popup
+					// Clear form for new event
+					document.getElementById("eventForm").reset();
 					document.getElementById("popup").style.display = "block";
+					document.getElementById("submitBtn").innerText = "Add Event";
+					document.getElementById("deleteBtn").style.display = "none";
 				},
 			},
 			custom2: {
@@ -66,31 +82,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			},
 		},
 		events: function (info, successCallback, failureCallback) {
-			//console.log("Loading events into calendar:", eventsData);
 			successCallback(eventsData);
-			/*fetch(eventsData)
-				.then(function (resp) {
-					return resp.json();
-				})
-				.then(function (data) {
-					console.log(data);
-					let events = data.events.map(function (event) {
-						return {
-							title: event.eventTitle,
-							start: event.eventStartDate,
-							end: event.eventEndDate,
-						};
-					});
-					console.log(events);
-					successCallback(events);
-				});*/
 		},
-		eventColor: "#378006",
+		/*eventColor: "#378006",
 		backgroundColor: "#378006",
-		textColor: "#378006",
-		// eventClick: function (info) {
-		// 	console.log(info);
-		// },
+		textColor: "#378006",*/
 	});
 
 	calendar.render();
@@ -108,46 +104,62 @@ document.addEventListener("DOMContentLoaded", function () {
 		.addEventListener("submit", function (event) {
 			event.preventDefault();
 
-			// Get title and date from inputs
 			const eventTitle = document.getElementById("eventTitle").value;
 			const startDate = document.getElementById("startDate").value;
 			const endDate = document.getElementById("endDate").value;
 
-			/*// Display event
-			console.log({
-				eventTitle: eventTitle,
-				eventStartDate: eventDate,
-			});
+			const eventId = event.target.dataset.eventId;
+			if (eventId) {
+				// Edit existing event
+				let event = calendar.getEventById(eventId);
+				event.setProp("title", eventTitle);
+				event.setStart(startDate);
+				event.setEnd(endDate);
 
-			// Add event to calendar
-		calendar.addEvent({
-				title: eventTitle,
-				start: eventDate,
-			});*/
+				// Update eventsData and localStorage
+				eventsData = eventsData.map((ev) =>
+					ev.id === eventId
+						? { ...ev, title: eventTitle, start: startDate, end: endDate }
+						: ev
+				);
+				localStorage.setItem("events", JSON.stringify(eventsData));
+			} else {
+				// Add new event
+				const newEvent = {
+					id: uuidv4(),
+					title: eventTitle,
+					start: startDate,
+					end: endDate,
+					editable: true,
+				};
 
-			const newEvent = {
-				id: uuidv4(),
-				title: eventTitle,
-				start: startDate,
-				end: endDate,
-				editable: true,
-			};
+				calendar.addEvent(newEvent);
+				eventsData.push(newEvent);
+				localStorage.setItem("events", JSON.stringify(eventsData));
+			}
 
-			// to show event immediately in UI
-			calendar.addEvent(newEvent);
-
-			eventsData.push(newEvent);
-
-			localStorage.setItem("events", JSON.stringify(eventsData));
-
-			// Hide the popup
 			document.getElementById("popup").style.display = "none";
-
-			// Clear the form
 			document.getElementById("eventForm").reset();
 		});
 
-	// Optional: Hide the popup when clicking outside of it
+	//DELETE: Handle event deletion
+	document.getElementById("deleteBtn").addEventListener("click", function () {
+		const eventId = document.getElementById("eventForm").dataset.eventId;
+		if (eventId) {
+			// delete from DOM
+			let event = calendar.getEventById(eventId);
+			event.remove();
+
+			//UPDATE: Update eventsData and localStorage
+			eventsData = eventsData.filter((ev) => ev.id !== eventId);
+			localStorage.setItem("events", JSON.stringify(eventsData));
+
+			document.getElementById("popup").style.display = "none";
+			document.getElementById("eventForm").reset();
+		}
+	});
+
+	// Hide the popup when clicking outside of it
 	window.onclick = function (event) {
 		const popup = document.getElementById("popup");
 		if (event.target === popup) {
@@ -156,10 +168,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	};
 });
 
+// format date to be "YYYY-MM-DDTHH:MM"
 function formatDateTimeLocal(date) {
-	const pad = (number) => (number < 10 ? "0" + number : number);
-
-	return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
-		date.getDate()
-	)}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+	return `${date.getFullYear()}-${(date.getMonth() + 1)
+		.toString()
+		.padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}T${date
+		.getHours()
+		.toString()
+		.padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
 }
