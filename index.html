@@ -9,7 +9,6 @@
   <script src="/script.js" defer></script>
   <link rel="stylesheet" href="/style.css">
   <title>Calendar</title>
-
 </head>
 
 <body>
@@ -33,7 +32,8 @@
           <label for="endDate">End Date:</label>
           <input type="datetime-local" id="endDate" name="endDate" required>
         </div>
-        <button type="submit">Add Event</button>
+        <button type="submit" id="submitBtn">Add Event</button>
+        <button type="button" id="deleteBtn" style="display: none;">Delete Event</button>
       </form>
     </div>
   </div>
