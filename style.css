@@ -68,19 +68,30 @@
 	box-sizing: border-box;
 }
 
-button[type="submit"] {
-	background-color: rgb(0, 105, 255);
+.eventForm button {
 	color: #fff;
 	padding: 10px 15px;
 	border: none;
 	border-radius: 4px;
 	font-size: 16px;
 	cursor: pointer;
-	transition: background-color 0.3s;
+	/* transition: background-color 0.3s; */
+}
+
+button[type="submit"] {
+	background-color: rgb(0, 105, 255);
 }
 
 button[type="submit"]:hover {
 	background-color: rgb(0, 85, 204);
+}
+
+button[type="button"] {
+	background-color: rgb(255, 51, 0);
+}
+
+button[type="button"]:hover {
+	background-color: rgb(162, 37, 5);
 }
 
 .fc .fc-button-primary {
