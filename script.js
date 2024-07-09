@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		eventClick: function (info) {
 			let eventObj = info.event;
 
-			// Populate the popup form with event details
+			// get event details
 			document.getElementById("eventTitle").value = eventObj.title;
 			document.getElementById("startDate").value = eventObj.start
 				.toISOString()
@@ -21,11 +21,9 @@ document.addEventListener("DOMContentLoaded", function () {
 				? eventObj.end.toISOString().slice(0, 16)
 				: "";
 			document.getElementById("popup").style.display = "block";
-
-			// Attach the event id to a hidden field or store it in a variable
 			document.getElementById("eventForm").dataset.eventId = eventObj.id;
 
-			// Change the form button text to "Edit Event" and show the delete button
+			// Change button text to "Edit Event" and show the delete button
 			document.getElementById("submitBtn").innerText = "Edit Event";
 			document.getElementById("deleteBtn").style.display = "inline-block";
 		},
@@ -67,8 +65,15 @@ document.addEventListener("DOMContentLoaded", function () {
 			addEventButton: {
 				text: "Add new Event!",
 				click: function () {
+					let startHour = new Date();
+					let endHour = new Date(startHour.getTime() + 60 * 60 * 1000);
+
 					// Clear form for new event
 					document.getElementById("eventForm").reset();
+					document.getElementById("startDate").value =
+						formatDateTimeLocal(startHour);
+					document.getElementById("endDate").value =
+						formatDateTimeLocal(endHour);
 					document.getElementById("popup").style.display = "block";
 					document.getElementById("submitBtn").innerText = "Add Event";
 					document.getElementById("deleteBtn").style.display = "none";
@@ -87,6 +92,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		/*eventColor: "#378006",
 		backgroundColor: "#378006",
 		textColor: "#378006",*/
+		// eventBackgroundColor: "red",
+		// eventColor: "yellow",
+		// eventBorderColor: "green",
 	});
 
 	calendar.render();
