@@ -9,6 +9,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		droppable: true,
 		selectable: true,
 		selectHelper: true,
+		eventClassNames: function (arg) {
+			console.log(arg);
+			return ["custom-event-class"];
+		},
 		eventClick: function (info) {
 			let eventObj = info.event;
 
@@ -63,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		},
 		customButtons: {
 			addEventButton: {
-				text: "Add new Event!",
+				text: "+",
 				click: function () {
 					let startHour = new Date();
 					let endHour = new Date(startHour.getTime() + 60 * 60 * 1000);
@@ -139,6 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					start: startDate,
 					end: endDate,
 					editable: true,
+					className: "event-meeting",
 				};
 
 				calendar.addEvent(newEvent);
