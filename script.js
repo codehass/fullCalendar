@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			console.log(arg);
 			return ["custom-event-class"];
 		},
+		// click event
 		eventClick: function (info) {
 			let eventObj = info.event;
 
@@ -32,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			document.getElementById("deleteBtn").style.display = "inline-block";
 		},
 		select: function (info) {
+			console.log('test')
 			let popup = document.getElementById("popup");
 			if (popup) {
 				popup.style.display = "block";
